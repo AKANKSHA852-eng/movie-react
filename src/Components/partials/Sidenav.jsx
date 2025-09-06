@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const Sidenav = () => {
   
   return (
-    <div className="w-[20%] h-full  border-r-2 border-zinc-400 p-10">
+    <div className="fixed w-[20%] h-full  border-r-2 border-zinc-400 p-10">
         <h1 className='text-2xl text-white font-bold m'>
            <i className="text-[#6556CD] ri-tv-fill text-2xl mr-2 "></i> 
              <span className='text-2xl'>MSHOWS</span>
@@ -14,18 +14,19 @@ const Sidenav = () => {
          <h1 className="text-white font-semibold text-xl mt-10 mb-5">
             New Feeds
             </h1>
-            <Link className="hover:bg-[#6556CD] hover:text-white duration-300 rounded-lg p-1"><i className="ri-fire-fill"></i>
+            <Link to={"/trending"} className="hover:bg-[#6556CD] hover:text-white duration-300 rounded-lg p-1"><i className="ri-fire-fill"></i>
             Trending
             </Link>
-            <Link className="hover:bg-[#6556CD] hover:text-white duration-300 rounded-lg p-1"> <i className="ri-bard-fill"></i>
+            <Link to={"/popular"} className="hover:bg-[#6556CD] hover:text-white duration-300 rounded-lg p-1"> <i className="ri-bard-fill"></i>
             Popular
             </Link>
-            <Link className="hover:bg-[#6556CD] hover:text-white duration-300 rounded-lg p-1"><i className="ri-movie-2-fill"></i>
+            <Link  to={"/movie"} className="hover:bg-[#6556CD] hover:text-white duration-300 rounded-lg p-1"><i className="ri-movie-2-fill"></i>
             Movies
-            </Link><Link className="hover:bg-[#6556CD] hover:text-white duration-300 rounded-lg p-1"><i className="ri-tv-2-fill"></i>
+            </Link>
+            <Link  to={"/tv"}  className="hover:bg-[#6556CD] hover:text-white duration-300 rounded-lg p-1"><i className="ri-tv-2-fill"></i>
             Tv Shows
             </Link>
-            <Link className="hover:bg-[#6556CD] hover:text-white duration-300 rounded-lg p-1"><i className="ri-team-fill"></i>
+            <Link to={"/person"} className="hover:bg-[#6556CD] hover:text-white duration-300 rounded-lg p-1"><i className="ri-team-fill"></i>
             People
             </Link>
         </nav>
