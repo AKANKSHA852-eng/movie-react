@@ -1,12 +1,13 @@
-import React from 'react'
-import loader from "/loader.gif"
+import React from "react";
+import loader from "/loader.gif";
 
-const Loading=()=> {
+const Loading = () => {
   return (
-    <div className='w-screen h-screen bg-black flex justify-center items-center'>
-        <img className="h-[50%] object-cover" src={loader} alt="" />
+    <div className="w-full min-h-screen flex flex-col items-center justify-center bg-black">
+      <img src={loader} alt="Loading..." className="w-100 h-50 mb-6" />
+      <h1 className="text-5xl text-white font-semibold">Loading...</h1>
     </div>
-  )
-}
+  );
+};
 
-export default Loading
+export default Loading;

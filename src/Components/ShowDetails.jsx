@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { asyncLoadMovie, removeMovie } from "../store/actions/movieActions";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import Loading from "./Loading";
-import Trailer from "./partials/Trailer";
+import { asyncLoadShow, removeShow } from "../store/actions/showActions";
 
-const MovieDetails = () => {
+const ShowDetails = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
   const dispatch = useDispatch();
-  const { info } = useSelector((state) => state.movie);
-  const [videoState, setvideoState] = useState(false);
-  // console.log(info.videos);
+  const { id } = useParams();
+  const { info } = useSelector((state) => state.show);
+ 
 
   useEffect(() => {
     if (id) {
-      dispatch(asyncLoadMovie(id));
+      dispatch(asyncLoadShow(id));
     }
     return () => {
-      dispatch(removeMovie());
+      dispatch(removeShow());
     };
   }, [id, dispatch]);
 
@@ -29,19 +27,8 @@ const MovieDetails = () => {
         backgroundSize: "cover",
         backgroundImage: `url(https://image.tmdb.org/t/p/original/${info.detail.backdrop_path})`,
       }}
-      className="w-full min-h-screen px-[10%] py-10 relative"
+      className="w-full min-h-screen px-[10%] py-10"
     >
-      {videoState ? <Trailer videoKey={info.videos.key} /> : ""}
-      {videoState ? (
-        <i
-          onClick={() => {
-            setvideoState(false);
-          }}
-          className="ri-close-fill text-white text-7xl absolute top-10 right-10 cursor-pointer"
-        ></i>
-      ) : (
-        ""
-      )}
       <nav className="flex">
         <Link onClick={() => navigate(-1)} className="text-4xl mr-10">
           <i className="ri-arrow-left-line"></i>
@@ -65,27 +52,29 @@ const MovieDetails = () => {
             }`}
             alt=""
           />
-          <div className=" leading-6">
+          <div className="leading-6">
             <div className="title leading-[6vh]">
-              <h1 className=" text-[8vh] font-black tracking-wider text-white py-2 ">
+              <h1 className="text-[8vh] font-black tracking-wider text-white py-2 ">
                 {info.detail.original_title}
-                <span className=" ml-3 text-[3vh]">
-                  ({info.detail.release_date.split("-")[0]})
+                <span className="ml-3 text-[3vh]">
+                  {info.detail.release_date
+                    ? `(${info.detail.release_date.split("-")[0]})`
+                    : ""}
                 </span>
               </h1>
             </div>
 
-            <div className=" text-white flex gap-9 mb-10">
-              <span className=" text-[2.3vh] font-medium -tracking-tight">
+            <div className="text-white flex gap-9 mb-10">
+              <span className="text-[2.3vh] font-medium -tracking-tight">
                 {info.detail.release_date}
               </span>
-              <span className=" text-[2.3vh] font-medium -tracking-tight">
+              <span className="text-[2.3vh] font-medium -tracking-tight">
                 {info.detail.genres.map((i) => i.name).join(",")}
               </span>
-              <span className=" text-[2.3vh] font-medium -tracking-tight">
+              <span className="text-[2.3vh] font-medium -tracking-tight">
                 {info.detail.runtime} min
               </span>
-              <span className=" text-[2.3vh] font-medium -tracking-tight">
+              <span className="text-[2.3vh] font-medium -tracking-tight">
                 {" "}
                 <i className="mr-1 ri-star-line"></i> {info.detail.vote_average}
               </span>
@@ -95,14 +84,14 @@ const MovieDetails = () => {
               {info.detail.tagline}
             </p>
 
-            <h1 className=" text-[3.7vh] font-semibold tracking-tight mt-10 mb-5 ">
+            <h1 className="text-[3.7vh] font-semibold tracking-tight mt-10 mb-5 ">
               Overview
             </h1>
             <p className="text-[2.3vh] py-3 tracking-tight">
               {info.detail.overview}
             </p>
 
-            <h1 className=" text-[3.7vh] tracking-tight font-semibold mt-10 mb-5 ">
+            <h1 className="text-[3.7vh] tracking-tight font-semibold mt-10 mb-5 ">
               Movie Translated
             </h1>
             <p className="text-[2.3vh] py-3 tracking-tight">
@@ -114,24 +103,16 @@ const MovieDetails = () => {
       <hr className="mt-20" />
       <div className="flex gap-10">
         <Link
-          to={`/movie/details/Recommendations/${id}`}
-          className="p-4 rounded-md mt-10 bg-[#6556CD] w-[12vw] font-semibold text-l whitespace-nowrap"
+          to={`/show/details/Recommendations/${id}`}
+          className="p-4 rounded-md mt-10 bg-[#6556CD] w-[10vw] font-semibold text-xl whitespace-nowrap"
         >
           Recommendations
         </Link>
         <Link
-          to={`/movie-actors/${id}`}
-          className="p-4 rounded-md mt-10 bg-[#6556CD] w-[10vw] font-semibold text-l whitespace-nowrap"
+          to={`/show-actors/${id}`}
+          className="p-4 rounded-md mt-10 bg-[#6556CD] w-[10vw] font-semibold text-xl whitespace-nowrap"
         >
           People Acted
-        </Link>
-        <Link
-          onClick={() => {
-            setvideoState(true);
-          }}
-          className="p-4 rounded-md mt-10 bg-[#6556CD] w-[10vw] font-semibold text-l whitespace-nowrap"
-        >
-          Watch Trailer
         </Link>
       </div>
     </div>
@@ -140,4 +121,4 @@ const MovieDetails = () => {
   );
 };
 
-export default MovieDetails;
+export default ShowDetails;

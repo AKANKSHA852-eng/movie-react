@@ -1,20 +1,29 @@
-import React from 'react'
+import React from "react";
 
-const Dropdown=  ({ title, options, func })=>  {
+const DropDown = ({ title, options, onChange }) => {
   return (
-      <div className="select">
-            <select  defaultValue={0} onChange={func} name="format" id="format">
-                <option value="0" disabled>
-                    {title}
-                </option>
-                {options.map((option, i) => (
-                    <option key={i} value={option}>
-                        {option.toUpperCase()}
-                    </option>
-                ))}
-            </select>
-        </div>
-  )
-}
+    <div className="max-w-lg bg-[#1F1E24] p-2 rounded-md">
+      <select
+        name="format"
+        id="format"
+        className="block w-fit p-4 mt-2 border border-gray-500 bg-[#1F1E24] text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6556CD] focus:border-[#6556CD] hover:bg-[#27252D] transition-colors duration-300 ease-in-out"
+        onChange={(e) => onChange(e.target.value)}
+      >
+        <option value="0" className="text-gray-300">
+          {title}
+        </option>
+        {options.map((option, index) => (
+          <option
+            key={index}
+            value={option.value}
+            className="text-white bg-[#1F1E24]"
+          >
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};
 
-export default Dropdown
+export default DropDown;

@@ -1,96 +1,59 @@
-import React from "react";
-import Topnav from './partials/Topnav'
+import React, { useEffect, useState } from "react";
+import SideNav from "./partials/SideNav";
+import TopNav from "./partials/TopNav";
+import DropDown from "./partials/DropDown";
 import { useNavigate } from "react-router-dom";
-import Dropdown from "./partials/Dropdown";
-import axios from "../utils/axios";
-import Loading from "./Loading";
+import axios from "../utils/Axios";
 import Cards from "./partials/Cards";
-import InfiniteScroll from "react-infinite-scroll-component";
-const Movie=()=> {
-  const navigate = useNavigate();
-  const [category, setCategory] = React.useState("now_playing");
-  const [movies, setMovies] = React.useState([]);
-  const [page, setPage] = React.useState(1);
-  const [hasMore, setHasMore] = React.useState(true);
-    document.title = "Movieflix | Movies";
 
-  const GetMovies = async () => {
+const Movie = () => {
+  document.title = "MSHOW | Movies";
+  const navigate = useNavigate();
+  const [category, setCategory] = useState("now_playing");
+  const [data, setData] = useState(null);
+
+  const getMovieData = async () => {
     try {
-      const { data } = await axios.get(`/movie/${category}?page=${page}`);
-      if (data.results.length > 0) {
-        setMovies((prevState) => [
-            ...prevState,
-            ...data.results,
-          ]);
-            setPage((prevState) => prevState + 1);
-        } 
-    else {
-        setHasMore(false);
-    }   
+      const { data } = await axios.get(`/movie/${category}`);
+      setData(data.results);
     } catch (error) {
-      console.log("Error: ", error);
+      console.log(error);
     }
   };
 
-  const refreshHandler = async () => {
-    if(movies.length === 0) {
-        GetMovies();
-    } else {
-        setMovies([]);
-        setPage(1);
-        GetMovies();
-    }
-    };
-
-    React.useEffect(() => {
-    refreshHandler();
+  useEffect(() => {
+    getMovieData();
   }, [category]);
 
-
-  return movies.length>0? (
-    <div className="px-[3%] w-screen ">
-
-      <div className="w-full flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-zinc-400">
+  return (
+    <div className="w-full h-full flex">
+      <SideNav />
+      <div className="w-[80%] max-h-screen overflow-auto px-5">
+        <div className="w-full flex items-center">
           <i
-            className=" hover:text-[#6556CD] ri-arrow-left-line"
             onClick={() => navigate(-1)}
-          ></i>{" "}
-          Movies 
-          <small>
-            <i className="text-[#6556CD] text-sm font-semibold ml-2">({category})</i>
-          </small>
-        </h1>
-        <div className="flex items-center w-[80%]"> 
-        <TopNav />
-        <Dropdown
-          title="Category"
-          options={[ "now_playing", "upcoming", "top_rated" ,"popular",]}
-          func={(e) => setCategory(e.target.value)}
-        />
-        <div className="w-[2%]"></div>
+            className="ri-arrow-left-line text-4xl  cursor-pointer"
+          ></i>
+          <TopNav left={20} />
+
+          <DropDown
+            title="Filter"
+            options={[
+              { value: "upcoming", label: "upcoming" },
+              { value: "now playing", label: "now_playing" },
+            ]}
+            onChange={(value) => setCategory(value)}
+          />
+        </div>
+        <div className="w-full h-fit grid grid-cols-4 gap-5 mt-5 px-5 py-3">
+          {data &&
+            data.map((item, index) => (
+              <Cards data={item} title="movie" key={index} />
+            ))}
         </div>
       </div>
-
-      <InfiniteScroll
-        dataLength={movies.length}
-        next={GetMovies}
-        hasMore={hasMore}
-        scrollThreshold={0.9}
-        className="w-full h-full flex flex-wrap justify-start items-center overflow-auto overflow-x-hidden"
-        endMessage={<h1 className="text-2xl text-zinc-400">No more data</h1>}
-      loader={<h1>Loading...</h1>}
-      >
-      <Cards data={movies} title="movie" />
-      </InfiniteScroll>
-       
-
     </div>
-  ) : (
-    <div className="w-full h-screen flex justify-center items-center">
-      <Loading />
-    </div>
-  )
-}
+  );
+};
 
 export default Movie;

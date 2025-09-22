@@ -1,39 +1,47 @@
-import React from 'react'
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-const Header = ({data}) => {
-  if (!data) return null; 
+import Trailer from "./Trailer";
+
+const Header = ({ WallPaper }) => {
+
+  
+  if (!WallPaper) {
+    return null;
+  }
+
   return (
-    <div  style={{
-        background: `linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.7),rgba(0,0,0,.9)),url(https://image.tmdb.org/t/p/original${
-          data.backdrop_path || data.profile_path
-        })`,
+    <div
+      className="w-full h-[48vh] flex flex-col justify-center p-[10%]"
+      style={{
+        backgroundPosition: "center",
         backgroundSize: "cover",
-        backgroundPosition: "top-[10%]",
-        backgroundRepeat: "no-repeat",
+        backgroundImage: `url(https://image.tmdb.org/t/p/original/${
+          WallPaper.backdrop_path || WallPaper.profile_path || ""
+        })`,
       }}
-      className="w-full h-[50vh] flex flex-col justify-end p-[5%] "
     >
-      <h1 className="w-[70%] text-5xl font-black text-white">
-        {data.name || data.title || data.original_name || data.original_title}
+      
+      <h1 className="w-[70%] text-5xl text-white font-bold text-left">
+        {WallPaper.name ||
+          WallPaper.original_name ||
+          WallPaper.title ||
+          WallPaper.original_title}
       </h1>
-      <p className="w-[70%] text-white mt-3 mb-3">
-        {data.overview.slice(0, 200) || data.biography}..
-        <Link className="text-blue-400">
-          More
-        </Link>
+      <p className="w-[70%] mt-3 text-xl text-white">
+        {WallPaper.overview.slice(0, 300)}...
+        <Link className="text-blue-600">more</Link>
       </p>
-      <p className="text-white">
-        <i className="text-yellow-500 ri-megaphone-fill"></i>
-        {data.release_date || data.first_air_date || "No Information "}
-        <i className="text-yellow-500 ri-album-fill ml-5"></i>
-        {data.media_type.toUpperCase()}
+      <p className="text-white mt-5">
+        <i className="text-yellow-500 text-2xl ri-megaphone-fill"></i>
+        {WallPaper.release_date ||
+          WallPaper.first_air_date ||
+          WallPaper.known_for_department}
+        <i className="text-yellow-500 text-2xl ri-album-fill"></i>
+        {WallPaper.media_type.toUpperCase()}
       </p>
-      <Link  className=" mt-5  text-white ">
-        <span className=" p-3 rounded bg-[#6556CD]"> <i className="ri-play-fill"></i> Watch Now</span>
-      </Link>
+      
     </div>
   );
-}
+};
 
 export default Header;
-  

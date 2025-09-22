@@ -6,16 +6,15 @@ import { useNavigate } from "react-router-dom";
 import axios from "../utils/Axios";
 import Cards from "./partials/Cards";
 
-const Trending = () => {
-  document.title = "MSHOWS | Trending";
+const Shows = () => {
+  document.title = "MSHOWS | Tv Shows";
   const navigate = useNavigate();
-  const [category, setCategory] = useState("all");
-  const [duration, setDuration] = useState("day");
+  const [category, setCategory] = useState("airing_today");
   const [data, setData] = useState(null);
 
-  const getTrendingData = async () => {
+  const getShowsData = async () => {
     try {
-      const { data } = await axios.get(`/trending/${category}/${duration}`);
+      const { data } = await axios.get(`/tv/${category}`);
       setData(data.results);
     } catch (error) {
       console.log(error);
@@ -23,8 +22,8 @@ const Trending = () => {
   };
 
   useEffect(() => {
-    getTrendingData();
-  }, [category, duration]);
+    getShowsData();
+  }, [category]);
 
   return (
     <div className="w-full h-full flex">
@@ -35,29 +34,22 @@ const Trending = () => {
             onClick={() => navigate(-1)}
             className="ri-arrow-left-line text-4xl  cursor-pointer"
           ></i>
-          <TopNav left={21} />
-          <DropDown
-            title="Duration"
-            options={[
-              { value: "day", label: "Today" },
-              { value: "week", label: "This Week" },
-            ]}
-            onChange={(value) => setDuration(value)}
-          />
+          <TopNav left={20} />
+
           <DropDown
             title="Filter"
             options={[
-              { value: "tv", label: "TV" },
-              { value: "movie", label: "Movie" },
-              { value: "all", label: "All" },
+              { value: "on_the_air", label: "on_the_air" },
+              { value: "popular", label: "popular" },
+              { value: "top_rated", label: "top_rated" },
             ]}
             onChange={(value) => setCategory(value)}
           />
         </div>
-        <div className="w-full h-fit grid grid-cols-4 gap-5 mt-5 px-5 py-3">
+        <div className="w-full h-auto grid grid-cols-4 gap-5 mt-5 px-5 py-3">
           {data &&
             data.map((item, index) => (
-              <Cards data={item} title="movie" key={index} />
+              <Cards data={item} title='shows' key={index} />
             ))}
         </div>
       </div>
@@ -65,4 +57,4 @@ const Trending = () => {
   );
 };
 
-export default Trending;
+export default Shows;
